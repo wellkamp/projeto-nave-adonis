@@ -10,7 +10,7 @@ class NaverSchema extends Schema {
       table.string('name').notNullable()
       table.string('job_role').notNullable()
       table.date('birthdate').notNullable()
-      table.date('admission_role').notNullable()
+      table.date('admission_date').notNullable()
       table.timestamps()
     })
   }

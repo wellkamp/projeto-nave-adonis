@@ -10,7 +10,7 @@ class ProjectsNaversSchema extends Schema {
       table
         .integer('project_id')
         .unsigned()
-        .index()
+        .index('project_id')
       table
         .foreign('project_id')
         .references('id')
@@ -19,7 +19,7 @@ class ProjectsNaversSchema extends Schema {
       table
         .integer('naver_id')
         .unsigned()
-        .index()
+        .index('naver_id')
       table
         .foreign('naver_id')
         .references('id')

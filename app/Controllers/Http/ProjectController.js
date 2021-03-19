@@ -1,46 +1,38 @@
-'use strict'
+const Project = use('App/Models/Project')
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
 
-/**
- * Resourceful controller for interacting with projects
- */
 class ProjectController {
-  /**
-   * Show a list of all projects.
-   * GET projects
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index ({ response }) {
+    try {
+      const getAllProjects = await Project
+      .query()
+      .with('navers')
+      .fetch()
+      return response.status(200).json(getAllProjects)
+    } catch (e) {
+      return response.status(500).json(e.message)
+    }
+    
   }
 
-  /**
-   * Render a form to be used for creating a new project.
-   * GET projects/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
   async create ({ request, response, view }) {
+    
   }
 
-  /**
-   * Create/save a new project.
-   * POST projects
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async store ({ request, response }) {
+    const { navers, ...data } = request.body
+      const project = await Project.create(data)
+      
+
+      if (navers && navers.length > 0) {
+        await project.navers().attach(navers)
+        project.projects = await project.navers().fetch()
+      }
+     
+    return response.status(201).json({
+      message:'ok',
+      data: project
+    })
   }
 
   /**

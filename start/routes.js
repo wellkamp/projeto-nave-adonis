@@ -16,6 +16,8 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
-})
+Route.get('/navers', 'NaverController.index')
+Route.post('/navers', 'NaverController.store')
+
+Route.get('/projects', 'ProjectController.index')
+Route.post('/projects', 'ProjectController.store')
