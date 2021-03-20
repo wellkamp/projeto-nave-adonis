@@ -6,7 +6,9 @@ class NaverController {
       const getAllNavers = await Naver
       .query()
       //.select('name','job_role','birthdate','admission_date')
-      .with('projects')
+      .with('projects')/* builder => {
+        builder.select("name")
+      })*/
       .fetch()
       response.status(200).json(getAllNavers)
     } catch(err) {
