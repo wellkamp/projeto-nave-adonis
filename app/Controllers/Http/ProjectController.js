@@ -20,7 +20,9 @@ class ProjectController {
   }
 
   async store ({ request, response }) {
-    const { navers, ...data } = request.body
+
+    try {
+      const { navers, ...data } = request.body
       const project = await Project.create(data)
       
 
@@ -29,55 +31,42 @@ class ProjectController {
         project.projects = await project.navers().fetch()
       }
      
-    return response.status(201).json({
-      message:'ok',
-      data: project
+      return response.status(201).json({
+        message:'ok',
+        data: project
     })
+    } catch(err) {
+      return response.status(500).json(err.message)
+    }
+    
   }
 
-  /**
-   * Display a single project.
-   * GET projects/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async show ({ params, response }) {
+    try {
+      const project = await Project.find(params.id)
+      const projects = await project.navers().fetch()
+
+      project.projects = projects
+
+      response.status(200).json({
+        message: 'Naver relacionados.',
+        data: project
+      })
+    } catch (err) {
+      return response.status(500).json(err.message)
+    }
   }
 
-  /**
-   * Render a form to update an existing project.
-   * GET projects/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
+
   async edit ({ params, request, response, view }) {
   }
 
-  /**
-   * Update project details.
-   * PUT or PATCH projects/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
+
+
   async update ({ params, request, response }) {
   }
 
-  /**
-   * Delete a project with id.
-   * DELETE projects/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
+
   async destroy ({ params, request, response }) {
   }
 }
